@@ -12,6 +12,8 @@ Building::
 
     $ make
 
+Work in progress: http://latexbuilder.dbrgn.ch/pdf/hsr-sa/main.pdf
+
 License / Credits
 -----------------
 
