@@ -13,23 +13,22 @@
 %----------------------------------------------------------------------------------------
 
 % Remove drafting to get rid of the '[ Date - classicthesis version 4.0 ]' text at the bottom of every page
-\PassOptionsToPackage{eulerchapternumbers,listings,drafting, pdfspacing, subfig,beramono,eulermath,parts}{classicthesis}
+\PassOptionsToPackage{eulerchapternumbers,listings,drafting,pdfspacing,subfig,beramono,eulermath,parts}{classicthesis}
 % Available options: drafting parts nochapters linedheaders eulerchapternumbers beramono eulermath pdfspacing minionprospacing tocaligned dottedtoc manychapters listings floatperchapter subfig
 % Adding 'dottedtoc' will make page numbers in the table of contents flushed right with dots leading to them
 
-\newcommand{\myTitle}{A Classic Thesis Style\xspace}
-\newcommand{\mySubtitle}{An Homage to The Elements of Typographic Style\xspace}
-\newcommand{\myDegree}{Doktor-Ingenieur (Dr.-Ing.)\xspace}
-\newcommand{\myName}{Andr\'e Miede\xspace}
-\newcommand{\myProf}{Put name here\xspace}
-\newcommand{\myOtherProf}{Put name here\xspace}
-\newcommand{\mySupervisor}{Put name here\xspace}
+\newcommand{\myTitle}{Tangible\xspace}
+\newcommand{\mySubtitle}{A Python library to convert data into tangible 3D models.\xspace}
+\newcommand{\myDegree}{\xspace}
+\newcommand{\myName}{Danilo Bargen\xspace}
+\newcommand{\myProf}{Prof. Dr. Josef M. Joller\xspace}
 \newcommand{\myFaculty}{Put data here\xspace}
 \newcommand{\myDepartment}{Put data here\xspace}
-\newcommand{\myUni}{Put data here\xspace}
-\newcommand{\myLocation}{Darmstadt\xspace}
-\newcommand{\myTime}{December 2011\xspace}
-\newcommand{\myVersion}{version 4.0\xspace}
+\newcommand{\myUni}{Hochschule für Technik Rapperswil\xspace}
+\newcommand{\myLocation}{Rapperswil\xspace}
+\newcommand{\myTime}{September--December 2013\xspace}
+\newcommand{\myVersion}{version 1.0\xspace}
+\newcommand{\myLicense}{CC BY-SA 3.0 Unported\xspace}
 
 %----------------------------------------------------------------------------------------
 %	USEFUL COMMANDS
@@ -51,29 +50,27 @@
 
 %------------------------------------------------
  
-\PassOptionsToPackage{latin9}{inputenc} % latin9 (ISO-8859-9) = latin1+"Euro sign"
+\PassOptionsToPackage{utf8}{inputenc}
 \usepackage{inputenc}
  
- %------------------------------------------------
+%------------------------------------------------
 
-%\PassOptionsToPackage{ngerman,american}{babel}  % Change this to your language(s)
-% Spanish languages need extra options in order to work with this template
-%\PassOptionsToPackage{spanish,es-lcroman}{babel}
+\PassOptionsToPackage{american}{babel}
 \usepackage{babel}
 
 %------------------------------------------------			
 
 \PassOptionsToPackage{square,numbers}{natbib}
- \usepackage{natbib}
+\usepackage{natbib}
  
- %------------------------------------------------
+%------------------------------------------------
 
 \PassOptionsToPackage{fleqn}{amsmath} % Math environments and more by the AMS 
- \usepackage{amsmath}
+\usepackage{amsmath}
  
- %------------------------------------------------
+%------------------------------------------------
 
-\PassOptionsToPackage{T1}{fontenc} % T2A for cyrillics
+\PassOptionsToPackage{T1}{fontenc}
 \usepackage{fontenc}
 
 %------------------------------------------------
@@ -121,7 +118,7 @@
 
 \usepackage{listings} 
 %\lstset{emph={trueIndex,root},emphstyle=\color{BlueViolet}}%\underbar} % for special keywords
-\lstset{language=[LaTeX]Tex, % Specify the language for listings here
+\lstset{language=Python, % Specify the language for listings here
 keywordstyle=\color{RoyalBlue}, % Add \bfseries for bold
 basicstyle=\small\ttfamily, % Makes listings a smaller font size and a different font
 %identifierstyle=\color{NavyBlue}, % Color of text inside brackets
