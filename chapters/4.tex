@@ -16,6 +16,8 @@ The architecture of Tangible can be categorized into four different parts: The
 generation backends}, \hyperref[sec:shapes]{shapes} and
 \hyperref[sec:utils]{utils}.
 
+\vspace{7mm}
+
 \begin{figure}[h]
 	\centering
 	\input{tikz/architecture}
@@ -28,15 +30,31 @@ generation backends}, \hyperref[sec:shapes]{shapes} and
 \section{AST}\label{sec:ast}
 
 The \texttt{ast.py} module provides the objects for the abstract syntax tree
-(AST) for Tangible. It contains the following classes:
-
-\subsection{Base class}
+(AST) for Tangible. All AST objects extend a single base class called
+\texttt{AST}. This base class is responsible for three things:
 
 \begin{itemize}
-	\item \texttt{AST}: The base shape for all AST elements.
+	\item It provides a single base type to use for type checking, e.g.
+		\texttt{isinstance(mysubclass, ast.AST)}.
+	\item It overrides the \texttt{\_\_eq\_\_} and \texttt{\_\_ne\_\_} methods in
+		a way that all subclasses are compared by value (using
+		\texttt{self.\_\_dict\_\_}), and not by identity.
+	\item It provides a \texttt{\_\_repr\_\_} implementation that displays both
+		the class name as well as the object memory address, which simplifies
+		debugging.
 \end{itemize}
 
-\subsection{2D shapes}
+\noindent The module contains the following classes:
+
+\subsection*{Base Class}
+\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}Base Class}
+
+\begin{itemize}
+	\item \texttt{AST}: The base shape for all AST elements, as described above.
+\end{itemize}
+
+\subsection*{2D Shapes}
+\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}2D Shapes}
 
 \begin{itemize}
 	\item \texttt{Circle}: A circle shape with a specified radius.
@@ -47,7 +65,8 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 	\item \texttt{Polygon}: A polygon shape made from a list of 2D coordinates.
 \end{itemize}
 
-\subsection{3D shapes}
+\subsection*{3D Shapes}
+\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}3D Shapes}
 
 \begin{itemize}
 	\item \texttt{Cube}: A cube with a specified width, height and depth.
@@ -57,7 +76,8 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 		or quads.
 \end{itemize}
 
-\subsection{Transformations}
+\subsection*{Transformations}
+\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}Transformations}
 
 \begin{itemize}
 	\item \texttt{Translate}: Used to translate an object.
@@ -66,7 +86,8 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 	\item \texttt{Mirror}: Used to mirror an object.
 \end{itemize}
 
-\subsection{Boolean Operations}
+\subsection*{Boolean Operations}
+\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}Boolean Operations}
 
 \begin{itemize}
 	\item \texttt{Union}: Combine multiple shapes into a single shape.
@@ -74,7 +95,8 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 	\item \texttt{Intersection}: A boolean intersection of two or more shapes.
 \end{itemize}
 
-\subsection{Extrusions}
+\subsection*{Extrusions}
+\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}Extrusions}
 
 \begin{itemize}
 	\item \texttt{LinearExtrusion}: Extrude a 2D object linearly along the z axis.
@@ -84,6 +106,12 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 %----------------------------------------------------------------------------------------
 
 \section{Backends}\label{sec:backends}
+
+The backends are responsible for code generation. They receive an
+\hyperref[sec:ast]{AST} instance and generate backend specific code from it.
+
+At the time of this writing, only one backend has been implemented: The OpenSCAD
+backend. But it would be very easy to add additional backends in the future.
 
 %----------------------------------------------------------------------------------------
 
