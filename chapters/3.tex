@@ -1,80 +1,8 @@
 % Chapter 3
 
-\chapter{Features {\&} Architecture}
+\chapter{Features {\&} Usage}
 
-\label{ch:features}
-
-%----------------------------------------------------------------------------------------
-
-\section{Overview}\label{sec:overview}
-
-Tangible is implemented as a single Python package, without any external
-dependencies.
-
-The architecture of Tangible can be divided into four different parts: The
-abstract syntax tree (AST), code generation backends, shapes and utils.
-
-\subsection{AST}\label{sec:overview:ast}
-
-The \texttt{ast.py} module provides the objects for the abstract syntax tree
-(AST) for Tangible. It contains the following classes:
-
-\subsubsection{Base class}
-
-\begin{itemize}
-	\item \texttt{AST}: The base shape for all AST elements.
-\end{itemize}
-
-\subsubsection{2D shapes}
-
-\begin{itemize}
-	\item \texttt{Circle}: A circle 2D shape.
-	\item \texttt{CircleSector}: A circle sector (pizza slice).
-	\item \texttt{Rectangle}: A rectangular 2D shape.
-	\item \texttt{Polygon}: A polygon 2D shape.
-\end{itemize}
-
-\subsubsection{3D shapes}
-
-\begin{itemize}
-	\item \texttt{Cube}: A cube with a specified width, height and depth.
-	\item \texttt{Sphere}: A sphere with a specified radius.
-	\item \texttt{Cylinder}: A cylinder with a height and top/bottom radii.
-	\item \texttt{Polyhedron}: An arbitrary 3D shape made from connected triangles
-		or quads.
-\end{itemize}
-
-\subsubsection{Transformations}
-
-\begin{itemize}
-	\item \texttt{Translate}
-	\item \texttt{Rotate}
-	\item \texttt{Scale}
-	\item \texttt{Mirror}
-\end{itemize}
-
-\subsubsection{Transformations}
-
-\begin{itemize}
-	\item \texttt{Union}
-	\item \texttt{Difference}
-	\item \texttt{Intersection}
-\end{itemize}
-
-\subsubsection{Extrusions}
-
-\begin{itemize}
-	\item \texttt{LinearExtrusion}
-	\item \texttt{RotateExtrusion}
-\end{itemize}
-
-\subsection{Backends}\label{sec:overview:backends}
-
-\subsection{Shapes}\label{sec:overview:shapes}
-
-\subsection{Utils}\label{sec:overview:utils}
-
-%----------------------------------------------------------------------------------------
+\label{ch:fetures}
 
 \section{Features}\label{sec:features}
 
