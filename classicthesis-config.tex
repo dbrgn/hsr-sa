@@ -39,6 +39,8 @@
 \newcommand{\eg}{e.\,g.}
 \newcommand{\Eg}{E.\,g.} 
 
+\newcommand{\tangible}{\emph{Tangible}}
+
 \newcounter{dummy} % Necessary for correct hyperlinks (to index, bib, etc.)
 \providecommand{\mLyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
 
@@ -104,6 +106,7 @@
 
 \usepackage{pgf} 
 \usepackage{tikz} 
+\usepackage{tikz-qtree}
 \usetikzlibrary{}
 
 %----------------------------------------------------------------------------------------
@@ -122,24 +125,30 @@
 %	CODE LISTINGS SETUP
 %----------------------------------------------------------------------------------------
 
-\usepackage{listings} 
+\usepackage{minted} % Syntax highlighting                                                                                                                                                                                                      
+\usemintedstyle{tango}
+\definecolor{tango-bg}{HTML}{F8F8F8}
+
+\newminted{python}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true}
+
+%\usepackage{listings} 
 %\lstset{emph={trueIndex,root},emphstyle=\color{BlueViolet}}%\underbar} % for special keywords
-\lstset{language=Python, % Specify the language for listings here
-keywordstyle=\color{RoyalBlue}, % Add \bfseries for bold
-basicstyle=\small\ttfamily, % Makes listings a smaller font size and a different font
-%identifierstyle=\color{NavyBlue}, % Color of text inside brackets
-commentstyle=\color{Green}\ttfamily, % Color of comments
-stringstyle=\rmfamily, % Font type to use for strings
-numbers=left, % Change left to none to remove line numbers
-numberstyle=\scriptsize, % Font size of the line numbers
-stepnumber=5, % Increment of line numbers
-numbersep=8pt, % Distance of line numbers from code listing
-showstringspaces=false, % Sets whether spaces in strings should appear underlined
-breaklines=true, % Force the code to stay in the confines of the listing box
-%frameround=ftff, % Uncomment for rounded frame
-frame=single, % Frame border - none/leftline/topline/bottomline/lines/single/shadowbox/L
-belowcaptionskip=.75\baselineskip % Space after the "Listing #: Desciption" text and the listing box
-}
+%\lstset{language=Python, % Specify the language for listings here
+%keywordstyle=\color{RoyalBlue}, % Add \bfseries for bold
+%basicstyle=\small\ttfamily, % Makes listings a smaller font size and a different font
+%%identifierstyle=\color{NavyBlue}, % Color of text inside brackets
+%commentstyle=\color{Green}\ttfamily, % Color of comments
+%stringstyle=\rmfamily, % Font type to use for strings
+%numbers=left, % Change left to none to remove line numbers
+%numberstyle=\scriptsize, % Font size of the line numbers
+%stepnumber=5, % Increment of line numbers
+%numbersep=8pt, % Distance of line numbers from code listing
+%showstringspaces=false, % Sets whether spaces in strings should appear underlined
+%breaklines=true, % Force the code to stay in the confines of the listing box
+%%frameround=ftff, % Uncomment for rounded frame
+%frame=single, % Frame border - none/leftline/topline/bottomline/lines/single/shadowbox/L
+%belowcaptionskip=.75\baselineskip % Space after the "Listing #: Desciption" text and the listing box
+%}
 
 %----------------------------------------------------------------------------------------
 %	HYPERREFERENCES
