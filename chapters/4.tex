@@ -142,12 +142,113 @@ The \texttt{shapes} package is a key component of \tangible{}. It provides a
 hierarchical collection of pre-defined shapes that can be used directly to
 generate three dimensional data visualizations.
 
+The package is organized into different files:
+
+\begin{itemize}
+	\item \texttt{base.py}: Base class for all shape objects.
+	\item \texttt{mixins.py}: Mixins used in the shape classes, mostly used for
+		data validation.
+	\item \texttt{bars.py}: Bar like shapes.
+	\item \texttt{vertical.py}: Vertical shapes, e.g. towers.
+	\item \texttt{pie.py}: Circular "pie" shapes.
+\end{itemize}
+
 \begin{figure}[H]
 	\centering
 	\input{tikz/shapes}
 	\caption{Shapes Architecture}
 	\label{img:shapes}
 \end{figure}
+
+\subsection{Base Class}
+
+The class \texttt{Shape} in \texttt{shapes/base.py} is the base class for all
+predefined shapes in \tangible{}:
+
+\vspace{.5\baselineskip}
+
+\begin{pythoncode}
+class Shape(object):
+    def __init__(self, data):
+        self.data = utils.ensure_list_of_lists(data)
+        if len(self.data[0]) == 0:
+            raise ValueError("Data may not be empty.")
+
+    def _build_ast(self):
+        raise NotImplementedError(
+                "_build_ast method not implemented.")
+
+    def render(self, backend):
+        self.ast = self._build_ast()
+        return backend(self.ast).generate()
+\end{pythoncode}
+
+Each shape is initialized with the data as the first positional argument. Using
+a helper function, single lists with one dimensional data are converted to
+nested lists, to simplify the rendering code. Empty data is not allowed.
+
+The \texttt{\_build\_ast()} method is not implemented in the base class. An
+inheriting class needs to override the method and return an AST.
+
+Finally, the \texttt{render(backend)} method renders the AST using the specified
+backend class and returns the resulting source code as a unicode string.
+
+\subsection{Mixins}
+
+The mixin classes are used in combination with Python's multiple inheritance
+system to provide "pluggable" generic data validation. At the time of this
+writing, the following mixins are available:
+
+\begin{itemize}
+	\item \texttt{Data1DMixin}: Ensures that data contains exactly 1 dataset.
+	\item \texttt{Data2DMixin}: Ensures that data contains exactly 2 datasets.
+	\item \texttt{Data4DMixin}: Ensures that data contains exactly 4 datasets.
+	\item \texttt{DataNDMixin}: Used for shapes where the number of data
+		dimensions is not relevant. But it asserts that the data is not empty and
+		that all data items are of a sequence type.
+	\item \texttt{SameLengthDatasetMixin}: Ensures that all datasets have the same
+		length.
+\end{itemize}
+
+The mixins are properly implemented using Python's argument list unpacking
+(\texttt{\textsuperscript{*}args, \textsuperscript{**}kwargs}) and
+\texttt{super()} calls, so that a class can use multiple mixins without breaking
+.the inheritance chain. A good example where this is used is the
+\texttt{RectangleTower2D} shape:
+
+\vspace{.5\baselineskip}
+
+\begin{pythoncode}
+class RectangleTower2D(Data2DMixin,
+    SameLengthDatasetMixin, VerticalShape):
+    # ...
+\end{pythoncode}
+
+\subsection{Shape Classes}
+
+\tangible{} provides different shapes ready to use. They are grouped into three
+categories: Bar shapes, vertical shapes and  pie shapes.
+
+\begin{itemize}
+	\item Bar shapes consist of several bars that start on \texttt{z=0} and have a
+		height depending on the corresponding datapoint. They can be aligned in
+		rows, and rows can be combined to create 3D bar graphs.
+	\item A vertical shape is a shape with layers stacked on top of each other,
+		with a fixed layer height, for example a round tower where the radius
+		corresponds to the datapoint.
+	\item A pie shape can represent data as angle, height or radius of the
+		corresponding slice. It is possible to define an inner radius ($\rightarrow$donut) and
+		to explode the slices.
+\end{itemize}
+
+\noindent The naming of the shape classes follows a consistent pattern: First a
+descriptive name of the shape (e.g. \texttt{RhombusTower} or
+\texttt{RadiusHeightPie}), then the dimensionality of the data (e.g.
+\texttt{1D}, \texttt{4D} or \texttt{ND}. A way to describe the data
+dimensionality in Python terms would be \emph{\texttt{n}-dimensional data is a
+list containing \texttt{n} lists}.
+
+TODO a separate chapter or section containing all shapes
 
 %----------------------------------------------------------------------------------------
 
