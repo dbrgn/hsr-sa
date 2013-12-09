@@ -46,15 +46,13 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 
 \noindent The module contains the following classes:
 
-\subsection*{Base Class}
-\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}Base Class}
+\subsection{Base Class}
 
 \begin{itemize}
 	\item \texttt{AST}: The base shape for all AST elements, as described above.
 \end{itemize}
 
-\subsection*{2D Shapes}
-\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}2D Shapes}
+\subsection{2D Shapes}
 
 \begin{itemize}
 	\item \texttt{Circle}: A circle shape with a specified radius.
@@ -65,8 +63,7 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 	\item \texttt{Polygon}: A polygon shape made from a list of 2D coordinates.
 \end{itemize}
 
-\subsection*{3D Shapes}
-\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}3D Shapes}
+\subsection{3D Shapes}
 
 \begin{itemize}
 	\item \texttt{Cube}: A cube with a specified width, height and depth.
@@ -76,8 +73,7 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 		or quads.
 \end{itemize}
 
-\subsection*{Transformations}
-\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}Transformations}
+\subsection{Transformations}
 
 \begin{itemize}
 	\item \texttt{Translate}: Used to translate an object.
@@ -86,8 +82,7 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 	\item \texttt{Mirror}: Used to mirror an object.
 \end{itemize}
 
-\subsection*{Boolean Operations}
-\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}Boolean Operations}
+\subsection{Boolean Operations}
 
 \begin{itemize}
 	\item \texttt{Union}: Combine multiple shapes into a single shape.
@@ -95,8 +90,7 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 	\item \texttt{Intersection}: A boolean intersection of two or more shapes.
 \end{itemize}
 
-\subsection*{Extrusions}
-\stepcounter{subsection}\addcontentsline{toc}{subsection}{\thesubsection\hspace*{1.19em}Extrusions}
+\subsection{Extrusions}
 
 \begin{itemize}
 	\item \texttt{LinearExtrusion}: Extrude a 2D object linearly along the z axis.
@@ -168,19 +162,19 @@ predefined shapes in \tangible{}:
 \vspace{.5\baselineskip}
 
 \begin{pythoncode}
-class Shape(object):
-    def __init__(self, data):
-        self.data = utils.ensure_list_of_lists(data)
-        if len(self.data[0]) == 0:
-            raise ValueError("Data may not be empty.")
-
+class BaseShape(object):
     def _build_ast(self):
-        raise NotImplementedError(
-                "_build_ast method not implemented.")
+        raise NotImplementedError("_build_ast method not implemented.")
 
     def render(self, backend):
         self.ast = self._build_ast()
         return backend(self.ast).generate()
+    
+class Shape(BaseShape):
+    def __init__(self, data):
+        self.data = utils.ensure_list_of_lists(data)
+        if len(self.data[0]) == 0:
+            raise ValueError("Data may not be empty.")
 \end{pythoncode}
 
 Each shape is initialized with the data as the first positional argument. Using
