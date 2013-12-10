@@ -296,21 +296,19 @@ to clamp the values to the output range or not.
 domains / codomains are currently not implemented, but will follow in the
 future.
 
-\subsection{Utils}
+\subsection{Helper Functions}
 
 The module \texttt{utils.py} contains different helper functions to simplify
 common tasks.
 
-\subsubsection{\texttt{pairwise()}}
+
+\subsubsection{\texttt{pairwise(iterable)}}
 
 \noindent This function returns a generator acting as a sliding window over an iterable.
 Each item returned by the generator is a 2-tuple containing two consecutive
-items from the original iterable. Function signature:
+items from the original iterable.
 
 \vspace{.5\baselineskip}
-\begin{pythoncode}
-pairwise(iterable)
-\end{pythoncode}
 
 \noindent Example:
 
@@ -324,7 +322,8 @@ pairwise(iterable)
 [(1, 2), (2, 3), (3, 4), (4, 'a')]
 \end{pythoncode}
 
-\subsubsection{\texttt{reduceby()}}
+
+\subsubsection{\texttt{reduceby(iterable, keyfunc, reducefunc, init)}}
 
 This function combines the functionality of \texttt{itertools.groupby()} and
 \texttt{reduce()}. It iterates over the iterable and aggregates the values using
@@ -332,33 +331,25 @@ the specified reduce function and init value as long as \texttt{keyfunc(item)}
 returns the same value. Each time the key changes, the aggregated value is
 yielded.
 
-A possible use case would be to aggregate website visits, grouped by month. The
-corresponding SQL statement would be:
+A possible use case could be the aggregation of website visits, grouped by
+month. The corresponding SQL statement would be:
 
 \vspace{.5\baselineskip}
 \begin{minted}[bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize]{sql}
 SELECT SUM(visit_count) FROM visits GROUP BY MONTH(visit_date);
 \end{minted}
 
-\noindent Function signature:
-
-\vspace{.5\baselineskip}
-\begin{pythoncode}
-reduceby(iterable, keyfunc, reducefunc, init)
-\end{pythoncode}
-
 \noindent Example:
 
 \vspace{.5\baselineskip}
 \begin{pythoncode}
+>>> from datetime import date
 >>> from tangible import utils
->>> visits = [
-... (date(2013, 1, 24), 27),
-... (date(2013, 1, 26), 4),
-... (date(2013, 2, 7), 19),
-... (date(2013, 3, 1), 23),
-... (date(2013, 3, 4), 42),
-... ]
+>>> visits = [(date(2013, 1, 24), 27),
+...           (date(2013, 1, 26), 4),
+...           (date(2013, 2, 17), 19),
+...           (date(2013, 3, 11), 23),
+...           (date(2013, 3, 14), 42)]
 >>> keyfunc = lambda x: x[0].month
 >>> reducefunc = lambda x, y: x + y[1]
 >>> groups = utils.reduceby(visits, keyfunc, reducefunc, 0)
@@ -367,3 +358,68 @@ reduceby(iterable, keyfunc, reducefunc, init)
 >>> list(groups)
 [31, 19, 65]
 \end{pythoncode}
+
+
+\subsubsection{\texttt{connect\_2d\_shapes(shapes,layer\_distance, orientation)}}
+
+This is quite a complex function. It connects a list of 2D shapes into a 3D
+shape using the desired layer distance. The \texttt{orientation} argument
+specifies, whether the shapes should be joined horizontally or vertically.
+
+The main part of the function has separate implementations depending on the 2D
+object. Circles are connected by joining cylinders, while rectangles and
+polygons are connected by joining polyhedra.
+
+\vspace{.5\baselineskip}
+
+\noindent Example:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> from tangible import utils, ast
+>>> shapes = [ast.Circle(3), ast.Circle(8), ast.Circle(5)]
+>>> utils.connect_2d_shapes(shapes, layer_distance=10,
+...     orientation='vertical')
+<AST/Union: 21376464>
+\end{pythoncode}
+
+
+\subsubsection{\texttt{\_quads\_to\_triangles(quads)}}
+
+This function converts a list of quads (4-tuples) to a list of triangles
+(3-tuples). This is mostly because many backends require surface meshes to
+consist of triangles, without support for quads.
+
+\vspace{.5\baselineskip}
+
+\noindent Example:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> from tangible import utils
+>>> quads = [(0, 1, 2, 3)]
+>>> utils._quads_to_triangles(quads)
+[(0, 1, 2), (0, 2, 3)]
+\end{pythoncode}
+
+\noindent The function is mostly used internally. A stable API is not guaranteed.
+
+
+\subsubsection{\texttt{\_ensure\_list\_of\_lists(data)}}
+
+This function ensures that the argument is a list of lists. If it doesn't
+contain lists or tuples, it is wrapped in a list and returned.
+
+\vspace{.5\baselineskip}
+
+\noindent Example:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> utils._ensure_list_of_lists([1, 2, 3])
+[[1, 2, 3]]
+>>> utils._ensure_list_of_lists([[1, 2], [3]])
+[[1, 2], [3]]
+\end{pythoncode}
+
+\noindent The function is mostly used internally. A stable API is not guaranteed.
