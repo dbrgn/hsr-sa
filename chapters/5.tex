@@ -113,7 +113,7 @@ with open('analytics-sep-13.csv', 'r') as datafile:
 tower = RhombusTower2D(datapoints, layer_height=10)
 
 # Render OpenSCAD code
-code = tower.render(backend=OpenScadBackend); print(code)
+code = tower.render(backend=OpenScadBackend); print code
 \end{pythoncode}
 \vspace{.5\baselineskip}
 
@@ -177,7 +177,7 @@ datapoints = map(lambda x: map(scale, x), datapoints)
 bars = BarsND(datapoints, bar_width=7, bar_depth=7)
 
 # Render OpenSCAD code
-code = bars.render(backend=OpenScadBackend); print(code)
+code = bars.render(backend=OpenScadBackend); print code
 \end{pythoncode}
 \vspace{.5\baselineskip}
 
@@ -219,7 +219,7 @@ class Cogwheel(BaseShape):
 # Render shape
 f = Cogwheel()
 code = f.render(backend=OpenScadBackend)
-print(code)
+print code
 \end{pythoncode}
 \vspace{.5\baselineskip}
 
