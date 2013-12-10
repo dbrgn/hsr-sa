@@ -13,7 +13,7 @@ data visualization is taken to a physical level.
 
 %----------------------------------------------------------------------------------------
 
-\section{Data visualization}\label{sec:datavis}
+\section{Data Visualization}\label{sec:datavis}
 
 \begin{quote}{\slshape
 The main goal of data visualization is its ability to \textbf{visualize data},
@@ -47,11 +47,11 @@ process.
 
 %----------------------------------------------------------------------------------------
 
-\section{The rise of affordable 3D printing}\label{sec:history-3dprinting}
+\section{The Rise of Affordable 3D Printing}\label{sec:history-3dprinting}
 
-Digital 3D representations of complex data have been around for quite a
-while\cite{marcus:2003}, but they were always confined to the digital world.
-Mostly because it was impractical to convert a digital model to a physical
+Digital 3D representations of complex data have been around for quite a while
+\cite{marcus:2003}, but they were always confined to the digital world.  Mostly
+because it was impractical to convert a digital model to a physical
 representation.
 
 Industrial 3D printing and CNC milling have been available for about 3 decades,
@@ -77,17 +77,48 @@ printers plummeted.
 machines capable of printing plastic objects, and making them freely available
 for the benefit of everyone.}
 
-The surge of new cheap 3D printers available for sale was largely due to an
-increasing number of enthusiasts from the \emph{Hacker-} and
-\emph{Maker-}Communities that worked on projects like the
-RepRap\footnote{\url{http://reprap.org/wiki/RepRap}}, a very successful and
-influential project.
+The surge of new cheap 3D printers -- as an affordable alternative to the large,
+expensive industrial-grade machines -- was largely due to an increasing number
+of enthusiasts from the \emph{Hacker-} and \emph{Maker-}Communities that worked
+on projects like the RepRap\footnote{\url{http://reprap.org/wiki/RepRap}}, a
+very successful and influential project.
 
-While many of these projects were started by communities as non commercial Open
-Source\footnote{\url{http://opensource.org/}} and Open
-Hardware\footnote{\url{http://www.oshwa.org/}} projects, new crowdfunding
-platforms like Kickstarter\footnote{\url{http://www.kickstarter.com/}} and
+As Erik De Bruijn, founder of the successful
+Ultimaker\footnote{\url{https://www.ultimaker.com/}} company, discusses in his
+Master's thesis \textit{``On the viability of the Open Source Development model
+for the design of physical objects -- Lessons learned from the RepRap project''}
+\cite{bruijn:2010}, the Open Source development model has proven to be well
+suited in the field of physical fabrication.
+
+At the same time, while many of these projects were started by communities as
+non commercial Open Source\footnote{\url{http://opensource.org/}} and Open
+Hardware\footnote{\url{http://www.oshwa.org/}} projects, crowdfunding platforms
+like Kickstarter\footnote{\url{http://www.kickstarter.com/}} and
 Indiegogo\footnote{\url{http://www.indiegogo.com/}} made raising capital for new
-3D printers feasable, something that would not have been possible 10 years ago.
+3D printers quick and easy, something that would not have been possible 10 years
+ago. This resulted in a flood of readily assembled, affordable 3D printers even
+for people lacking the skills to build their own machine from a list of parts.
 
-TODO finish.
+%----------------------------------------------------------------------------------------
+
+\section{From Data to Tangible Objects}
+
+With the rapid and constantly accelerating developments in the field of 3D
+printing, visualizing data as real, tangible objects has become feasible. There
+are still some hurdles though.  The majority of people, even those owning a 3D
+printer, have no experience with 3D modelling software. Most freely available
+open source tools to create 3D models -- like OpenSCAD or
+Blender\footnote{\url{http://www.blender.org/}} -- require a steep learning
+curve and demand a nontrivial amount of learning time to create the desired
+models. And platforms like
+Thingiverse\footnote{\url{http://www.thingiverse.com/}} or
+YouMagine\footnote{\url{https://www.youmagine.com/}} provide so many freely
+available models that creating own objects is often not even a necessity.
+
+Another aspect is that these general-purpose modelling tools are not optimized
+for data visualization. Each type of visualization has to be created manually,
+and when the data changes it's a lot of manual work to update the model.
+
+\tangible{} was created to fill that void. It makes creation of customized,
+printable data visualizations as 3D models easy, while at the same time
+retaining a lot of flexibility for customization.
