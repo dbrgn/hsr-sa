@@ -112,7 +112,6 @@ backend. But it's be very easy to add additional backends in the future.
 To be valid, a custom backend simply needs to implement the following interface:
 
 \vspace{.5\baselineskip}
-
 \begin{pythoncode}
 class CustomBackend(object):
     def __init__(self, ast):
@@ -247,3 +246,124 @@ TODO a separate chapter or section containing all shapes
 %----------------------------------------------------------------------------------------
 
 \section{Utils}\label{sec:utils}
+
+\subsection{Scales}
+
+The module \texttt{scales.py} contains functions for mapping an input domain to
+an output range (the codomain). For example it could be used to normalize
+temperatures between 0\si{\degree}C and 100\si{\degree}C to values between 1 and
+10. The scales are inspired by the quantitative scales in
+\texttt{d3.js}\footnote{\url{https://github.com/mbostock/d3/wiki/Quantitative-Scales}}.
+
+At the time of this writing, only a linear scale has been implemented. It
+accepts three parameters: The domain, the codomain (output range), and whether
+to clamp the values to the output range or not.
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> from tangible import scales
+>>> temperatures = [32, 60, 100, 0, 120, -50]
+>>> domain = [0, 100]  # Input range
+>>> codomain = [1, 10]  # Output range
+>>> scale = scales.linear(domain, codomain, clamp=False)
+>>> scale_clamp = scales.linear(domain, codomain=, clamp=True)
+\end{pythoncode}
+
+\noindent The returned object is the actual scaling function:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> scale(0)
+1.0
+>>> scale(50)
+5.5
+>>> scale(100)
+10.0
+\end{pythoncode}
+
+\noindent A very convenient way to use scales is by applying them using the
+\texttt{map()} function:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> map(scale, temperatures)
+[3.88, 6.3999999999999995, 10.0, 1.0, 11.799999999999999, -3.5]
+>>> map(scale_clamp, temperatures)
+[3.88, 6.3999999999999995, 10.0, 1.0, 10, 1]
+\end{pythoncode}
+
+\noindent Logarithmic and exponential scales as well as dynamic resizing of
+domains / codomains are currently not implemented, but will follow in the
+future.
+
+\subsection{Utils}
+
+The module \texttt{utils.py} contains different helper functions to simplify
+common tasks.
+
+\subsubsection{\texttt{pairwise()}}
+
+\noindent This function returns a generator acting as a sliding window over an iterable.
+Each item returned by the generator is a 2-tuple containing two consecutive
+items from the original iterable. Function signature:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+pairwise(iterable)
+\end{pythoncode}
+
+\noindent Example:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> from tangible import utils
+>>> pairs = utils.pairwise([1, 2, 3, 4, 'a'])
+>>> pairs
+<itertools.izip object at 0xeea098>
+>>> list(pairs)
+[(1, 2), (2, 3), (3, 4), (4, 'a')]
+\end{pythoncode}
+
+\subsubsection{\texttt{reduceby()}}
+
+This function combines the functionality of \texttt{itertools.groupby()} and
+\texttt{reduce()}. It iterates over the iterable and aggregates the values using
+the specified reduce function and init value as long as \texttt{keyfunc(item)}
+returns the same value. Each time the key changes, the aggregated value is
+yielded.
+
+A possible use case would be to aggregate website visits, grouped by month. The
+corresponding SQL statement would be:
+
+\vspace{.5\baselineskip}
+\begin{minted}[bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize]{sql}
+SELECT SUM(visit_count) FROM visits GROUP BY MONTH(visit_date);
+\end{minted}
+
+\noindent Function signature:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+reduceby(iterable, keyfunc, reducefunc, init)
+\end{pythoncode}
+
+\noindent Example:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> from tangible import utils
+>>> visits = [
+... (date(2013, 1, 24), 27),
+... (date(2013, 1, 26), 4),
+... (date(2013, 2, 7), 19),
+... (date(2013, 3, 1), 23),
+... (date(2013, 3, 4), 42),
+... ]
+>>> keyfunc = lambda x: x[0].month
+>>> reducefunc = lambda x, y: x + y[1]
+>>> groups = utils.reduceby(visits, keyfunc, reducefunc, 0)
+>>> groups
+<generator object reduceby at 0xedc5a0>
+>>> list(groups)
+[31, 19, 65]
+\end{pythoncode}

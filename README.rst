@@ -7,7 +7,7 @@ Building
 Dependencies (Arch Linux)::
 
     $ pacman -S make python2 texlive-core texlive-latexextra \
-                texlive-fontsextra texlive-pictures
+                texlive-fontsextra texlive-pictures texlive-science
 
 Git submodules::
 
