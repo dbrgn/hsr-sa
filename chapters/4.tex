@@ -6,7 +6,7 @@
 
 %----------------------------------------------------------------------------------------
 
-\section{Overview}\label{sec:overview}
+\section{Overview}\label{sec:architecture:overview}
 
 \tangible{} is implemented as a single Python package, without any external
 dependencies.
@@ -14,7 +14,7 @@ dependencies.
 The architecture of \tangible{} can be categorized into four different parts: The
 \hyperref[sec:ast]{abstract syntax tree (AST)}, \hyperref[sec:backends]{code
 generation backends}, \hyperref[sec:shapes]{shapes} and
-\hyperref[sec:utils]{utils}.
+\hyperref[sec:architecture:utils]{utils}.
 
 \vspace{7mm}
 
@@ -27,7 +27,7 @@ generation backends}, \hyperref[sec:shapes]{shapes} and
 
 %----------------------------------------------------------------------------------------
 
-\section{AST}\label{sec:ast}
+\section{AST}\label{sec:architecture:ast}
 
 The \texttt{ast.py} module provides the objects for the abstract syntax tree
 (AST) for \tangible{}. All AST objects extend a single base class called
@@ -99,10 +99,10 @@ The \texttt{ast.py} module provides the objects for the abstract syntax tree
 
 %----------------------------------------------------------------------------------------
 
-\section{Backends}\label{sec:backends}
+\section{Backends}\label{sec:architecture:backends}
 
 The backends are responsible for code generation. They receive an
-\hyperref[sec:ast]{AST} instance, traverse it and emit backend specific code.
+\hyperref[sec:architecture:ast]{AST} instance, traverse it and emit backend specific code.
 
 At the time of this writing, only one backend has been implemented: The OpenSCAD
 backend. But it's be very easy to add additional backends in the future.
@@ -129,7 +129,7 @@ TODO: cross-reference to implementation details
 
 %----------------------------------------------------------------------------------------
 
-\section{Shapes}\label{sec:shapes}
+\section{Shapes}\label{sec:architecture:shapes}
 
 The \texttt{shapes} package is a key component of \tangible{}. It provides a
 hierarchical collection of pre-defined shapes that can be used directly to
@@ -245,7 +245,7 @@ TODO a separate chapter or section containing all shapes
 
 %----------------------------------------------------------------------------------------
 
-\section{Utils}\label{sec:utils}
+\section{Utils}\label{sec:architecture:utils}
 
 \subsection{Scales}
 
