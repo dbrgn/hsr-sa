@@ -4,9 +4,96 @@
 
 \label{ch:development}
 
-TODO: Code Generation Pattern
+%----------------------------------------------------------------------------------------
 
-TODO: Future imports
+\section{Coding Guidelines}
+
+\marginpar{The PEPs (Python Enhancement Proposals) are Python's way of
+continuously improving the language in a community driven process. Any community
+member can submit a proposal for a language change, which is then discussed and
+accepted or rejected.}
+
+Coding guidelines are important in order to achieve a consistent style
+throughout the codebase. In the Python world, the PEP8 style guide
+\cite{pep8:2001} has seen near ubiquitous adaptation and should be used for all
+projects in order to aid the legibility of the source code.
+
+\begin{quote}{\slshape
+One of Guido's key insights is that code is read much more often than it is
+written. The guidelines provided here are intended to improve the readability of
+code and make it consistent across the wide spectrum of Python code. As PEP 20
+says, ``Readability counts''. \\ \medskip
+--- \defcitealias{pep8:2001}{Style Guide for Python Code}\citetalias{pep8:2001} \citep{pep8:2001}
+}\end{quote}
+
+\noindent \tangible{} follows most parts of PEP8, with two exceptions:
+
+\begin{itemize}
+	\item While line lengths below 80 characters are the ideal case, lines with up
+		to 99 characters are still acceptable, if it makes the code more readable.
+	\item Errors E126--E128, which specify indentation rules for multi-line
+		statements, can be ignored.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+
+\section{Future Imports}
+
+While Python 3 has first been released back in 2008, it has still not completely
+managed to replace the older 2.x versions. As a result, the \tangible{} codebase
+currently targets Python 2.7.
+
+But in the past year several things have happened that accelerated the adoption
+rate of Python 3. Most importantly, several big Linux distributions like Arch
+Linux\footnote{\url{https://www.archlinux.org/}} and
+Fedora\footnote{\url{http://fedoraproject.org/}} have decided to move to Python
+3 as the default Python implementation. Another important factor was the newly
+added Python 3 support in big Python frameworks like
+Django\footnote{\url{https://www.djangoproject.com/}}.
+
+In view of these facts, the \tangible{} source code is written in a forward
+compatible way by adding ``future-imports'' to the top of every code file.
+Python provides a module called \texttt{future} which contains backports of
+newer language features to older Python versions. By using these imports, the
+migration process to newer language versions can be simplified.
+
+In the \tangible{} Project, the following preamble should be added to every
+source code file:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+# -*- coding: utf-8 -*-
+from __future__ import print_function, division
+from __future__ import absolute_import, unicode_literals
+\end{pythoncode}
+
+\noindent This results in the following effects:
+
+\begin{itemize}
+	\item The \texttt{\# -*- coding: utf-8 -*-} line tells the Python interpreter
+		that this file is UTF8-encoded. In Python 3 UTF8 encoding will become the
+		default.
+	\item The \texttt{print\_function} import removes the \texttt{print} statement
+		and adds a \texttt{print()} function.
+	\item When activating the \texttt{division} import, division of two integers
+		results in a \texttt{float} value instead of the old, lossy way of returning
+		a floored integer. When floor division is explicitly desired, the
+		\texttt{//} operator should be used instead.
+	\item By importing \texttt{absolute\_import}, Python prioritizes absolute
+		imports over relative imports. This fixes a few issues with import name
+		clashes.
+	\item The \texttt{unicode\_literals} import is the one with the most
+		consequences of all the future imports listed above. It changes the default
+		type of strings from bytestrings to unicode objects. By eliminating this
+		Python 2/3 consistency from the beginning, many hard to spot migration bugs
+		can be prevented.
+\end{itemize}
+
+\noindent The choice of future imports is based on the article \emph{Quick Tips
+on Making Your Code Python 3 Ready} by Hristo Deshev \cite{deshev:2012}
+
+\newpage
+TODO: Code Generation Pattern
 
 TODO: Coding guidelines
 
