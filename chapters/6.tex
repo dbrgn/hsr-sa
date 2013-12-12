@@ -1,6 +1,6 @@
 % Chapter 6
 
-\chapter{Development Process \& Design Decisions}
+\chapter{Development Process \& Tools Used}
 
 \label{ch:development}
 
@@ -31,9 +31,12 @@ says, ``Readability counts''. \\ \medskip
 \begin{itemize}
 	\item While line lengths below 80 characters are the ideal case, lines with up
 		to 99 characters are still acceptable, if it makes the code more readable.
-	\item Errors E126--E128, which specify indentation rules for multi-line
-		statements, can be ignored.
+	\item Errors \texttt{E126--E128}, which specify indentation rules for
+		multi-line statements, can be ignored.
 \end{itemize}
+
+\noindent The adherence to these coding guidelines are tested automatically by
+the test suite. Violations are counted as test failures.
 
 %----------------------------------------------------------------------------------------
 
@@ -92,9 +95,155 @@ from __future__ import absolute_import, unicode_literals
 \noindent The choice of future imports is based on the article \emph{Quick Tips
 on Making Your Code Python 3 Ready} by Hristo Deshev \cite{deshev:2012}
 
-\newpage
-TODO: Code Generation Pattern
+%----------------------------------------------------------------------------------------
 
-TODO: Coding guidelines
+\section{Testing}
 
-TODO: Testing
+\begin{quote}{\slshape
+More than the act of testing, the act of designing tests is one of the best bug
+preventers known. The thinking that must be done to create a useful test can
+discover and eliminate bugs before they are coded — indeed, test-design thinking
+can discover and eliminate bugs at every stage in the creation of software, from
+conception to specification, to design, coding and the rest.\\ \medskip
+--- \defcitealias{beizer:2003}{Boris Beizer}\citetalias{beizer:2003} \citep{beizer:2003}
+}\end{quote}
+
+\noindent Testing is not a question of "whether", but rather a question of
+"how". By having a high test coverage of your code base, code can be changed
+without any fear of overlooking newly introduced bugs. The TDD\footnote{Test
+Driven Development} methodology greatly aids both the process of writing tests,
+as well as the process of writing software. By writing tests before actually
+implementing the code leads to better structured, more easily testable code with
+less bugs than if testing features after their implementation.
+
+This section can be divided into three subsections: Writing the tests, running
+the tests and measuring test coverage.
+
+\subsection{Writing Tests}
+
+\tangible{} uses the pytest\footnote{\url{http://pytest.org/}} framework for
+writing tests. pytest provides both tools for easier and more lightweight
+testing as well as an easy way for test discovery.
+
+In contrast to Python's builtin \texttt{unittest} module, which was heavily
+inspired by Java, pytest does not require the developer to use explicit methods
+for expressing assertions like \texttt{assertEquals} or \texttt{assertGreater}.
+Instead it relies on the \texttt{assert} keyword while still providing useful
+error messages by using language reflection.
+
+A simple test could just look like the following example:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+def test_the_answer():
+    assert 19 + 23 == 42
+\end{pythoncode}
+
+\noindent In contrast, the \texttt{unittest} version would look like this:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+import unittest
+class TestTheAnswer(unittest.TestCase):
+    def testIt(self):
+        self.assertEquals(19 + 23, 42)
+\end{pythoncode}
+
+As the Zen of Python \cite{pep20:2004} states, \emph{``Simple is better than
+complex.''}. Therefore the Pytest version should be preferred over using
+\texttt{unittest}.
+
+But simpler asserts are not the only advantage that pytest offers over unittest.
+Another feature that has been used extensively in \tangible{} is parametrized
+testing. By specifying a set of possible values for the test parameters using
+the \texttt{pytest.mark.parametrize} decorator, multiple tests are generated
+from a single test function. If one of five input values makes the test fail,
+the test result would be 4 successful tests out of a total of 5, whereas putting
+all the values to be checked in a nonparametrized function would lead to a
+single failing test.
+
+Here is an example of a parametrized test from the \tangible{} test suite:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+import pytest
+from tangible import scales
+
+@pytest.mark.parametrize(('param', 'clamp', 'expected'), [
+    (2, False, 10),
+    (3.5, False, 17.5),
+    (6, False, 30),
+    (6, True, 20),
+])
+def test_linear(param, clamp, expected):
+    domain, codomain = (2, 4), (10, 20)
+    scale = scales.linear(domain, codomain, clamp)
+    assert scale(param) == expected
+\end{pythoncode}
+
+
+\subsection{Running Tests}
+
+pytest offers highly customizable test discovery out of the box. After
+configuring the patterns to be used for detecting tests, the suite can be run
+by simply issueing \texttt{py.test} in the main project directory.
+
+But manually running tests is a step that's often forgotten while developing.
+Tests are better when they're fully automated. Travis CI
+(\url{https://travis-ci.org/}) is a startup company that offers free continuous
+integration for open source projects. A minimal configuration file is all that's
+needed to get everything up and running. The test results are presented in an
+easy to understand manner in the web browser:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/travis.png}
+	\caption{Travis CI}
+	\label{img:travis}
+\end{figure}
+
+\subsection{Measuring Test Coverage}
+
+Simply having many tests does not necessarily mean that the code is well tested.
+A high test coverage coes not either, but it's a good indicator on how many
+lines of code have been hit by the tests, and how many haven't.
+
+In the \tangible{} project coverage is measured through the
+coverage.py\footnote{\url{http://nedbatchelder.com/code/coverage/}} module. The
+result is displayed each time the test suite runs thanks to the
+pytest-cov\footnote{\url{https://pypi.python.org/pypi/pytest-cov}} plugin for
+pytest.
+
+Change in test coverage is tracked by the Coveralls.io
+(\url{https://coveralls.io/}) service. The current coverage can be included in
+the README file by embedding a dynamic image from the Coveralls server. This
+way, the current coverage is always visible.
+
+%----------------------------------------------------------------------------------------
+
+\section{Tools Used}
+
+During the time of this thesis, the following tools have been used:
+
+\begin{itemize}
+	\item The Vim text editor for editing both program source code and
+		documentation.\\ \url{http://www.vim.org/}
+	\item Flake8 for coding style checks and static code analysis.\\
+		\url{https://flake8.readthedocs.org/}
+	\item pytest for running the test suite.\\
+		\url{http://pytest.org/}
+	\item Travis CI for automated testing.\\
+		\url{https://travis-ci.org/}
+	\item Coveralls for automated test coverage measuring.\\
+		\url{https://coveralls.io/}
+	\item OpenSCAD to convert the generated model code to actual STL files.\\
+		\url{http://www.openscad.org/}
+	\item Makerbot / Makerware to test-print a few of the generated 3D models.\\
+		\url{http://www.makerbot.com/makerware/}
+	\item \LaTeX{} for typesetting this project documentation.\\
+		\url{http://www.latex-project.org/}
+	\item Sphinx for generating the online user documentation.\\
+		\url{http://sphinx-doc.org/}
+	\item Git and Github for version control.\\
+		\url{http://git-scm.com/} \url{https://github.com/}
+\end{itemize}
