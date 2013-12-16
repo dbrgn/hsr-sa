@@ -201,14 +201,23 @@ efforts.
 
 \subsection{Interpolation / Smoothing}
 
-TODO
+\tangible{} provides no tools for interpolation / smoothing of surfaces. This
+means that shapes with a lot of datapoints may look verry ragged and printing
+them may cause problems because of the overhanging surfaces.
+
+Although libraries like Numpy\footnote{\url{http://www.numpy.org/}} and
+SciPy\footnote{\url{http://www.scipy.org/}} provide interpolation functionality,
+this is something that \tangible{} should provide out of the box. A possible way
+of implementing curve smoothing would be by using spline interpolation. This
+feature is planned for a future release.
 
 \subsection{Data Preprocessing Tools}
 
-- more scales
-- more grouping functions
-
-TODO
+The current selection of data preprocessing tools is already very useful, but
+still doesn't cover many use cases. Therefore these utils should be expanded,
+for example by adding logarithmic and exponential scales and by adding more
+grouping functions. Furthermore the scales could be improved to allow changes in
+the domain / codomain and rescaling the data at any point in time.
 
 \subsection{Python 3 Support}
 
