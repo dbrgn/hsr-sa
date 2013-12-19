@@ -93,11 +93,101 @@ class OpenScadBackend(object):
         return prgm.render()
 \end{pythoncode}
 
-% todo preamble
-
 %----------------------------------------------------------------------------------------
 
 \newpage
 \section{Circle Sectors in OpenSCAD}\label{sec:design:circlesectors}
 
-TODO describe circle sectors.
+By default, OpenSCAD does not support circle sectors. Therefore the shape had to
+be developed manually as a module.
+
+\vspace{.5\baselineskip}
+\begin{minted}[bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize]{javascript}
+module circle_sector(r, a) {
+    a1 = a % 360; a2 = 360 - (a % 360);
+    if (a1 <= 180) {
+        intersection() {
+            circle(r);
+            polygon([
+                [0,0],
+                [0,r],
+                [sin(a1/2)*r, r + cos(a1/2)*r],
+                [sin(a1)*r + sin(a1/2)*r, cos(a1)*r + cos(a1/2)*r],
+                [sin(a1)*r, cos(a1)*r],
+            ]);
+        }
+    } else {
+        difference() {
+            circle(r);
+            mirror([1,0]) {
+                polygon([
+                    [0,0],
+                    [0,r],
+                    [sin(a2/2)*r, r + cos(a2/2)*r],
+                    [sin(a2)*r + sin(a2/2)*r, cos(a2)*r + cos(a2/2)*r],
+                    [sin(a2)*r, cos(a2)*r],
+                ]);
+            };
+        }
+    }
+};
+\end{minted}
+
+\noindent The base concept is that a circle with the specified radius and a
+polygon are combined, depending on the angle. If the angle is less than or equal
+to 180\si{\degree}, the resulting shape is the intersection of the circle and
+the polygon. If it's larger than 180\si{\degree}, the difference between the two
+shapes is returned.
+
+The polygon always consists of five points, which are calculated as shown in the
+following table for angles less or equal to 180\si{\degree}. For angles between
+180\si{\degree} and 360\si{\degree}, the polygon is simply mirrored along the y
+axis.
+
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\textwidth}{XX} \toprule
+		\tableheadline{x} & \tableheadline{y} \\
+		\midrule
+		$0$ & $0$ \\
+		$0$ & $r$ \\
+		$\sin(\alpha / 2) \cdot r$ & $r + \cos(\alpha / 2) \cdot r$ \\
+		$\sin(\alpha) \cdot r + \sin(\alpha / 2) \cdot r$ & $\cos(\alpha) \cdot r + \cos(\alpha / 2) \cdot r$ \\
+		$\sin(\alpha) \cdot r$ & $\cos(\alpha) \cdot r$ \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+
+\noindent The following six images show the circle and polygon combinations for
+45, 90, 180, 225, 270 and 315 degrees.
+
+\begin{figure}[H]
+	\centering
+	\subfloat[]{\includegraphics[width=.30\textwidth]{images/cs_45}}
+	\quad
+	\subfloat[]{\includegraphics[width=.30\textwidth]{images/cs_90}}
+	\quad
+	\subfloat[]{\includegraphics[width=.30\textwidth]{images/cs_180}}
+	\\
+	\subfloat[]{\includegraphics[width=.30\textwidth]{images/cs_225}}
+	\quad
+	\subfloat[]{\includegraphics[width=.30\textwidth]{images/cs_270}}
+	\quad
+	\subfloat[]{\includegraphics[width=.30\textwidth]{images/cs_315}}
+
+	\caption{Circle and polygon combinations at different angles}
+	\label{img:circle_shape_angles}
+\end{figure}
+
+\noindent By combining the two shapes in such a way, any circle sector can be
+created. Example for \texttt{circle\_sector(10, 225)}:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.70\textwidth]{images/cs_225_result}
+	\caption{The resulting circle sector for an angle of 225\si{\degree}}
+	\label{img:circle_shape_result}
+\end{figure}
+
+\noindent The module source code is used in the OpenSCAD backend implementation
+as a preamble snippet.
