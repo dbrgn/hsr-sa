@@ -6,9 +6,63 @@
 
 %----------------------------------------------------------------------------------------
 
+\section{Pairwise Iterator} \label{sec:design:pairwise}
+
+The pairwise iterator (in \texttt{tangible/utils.py}) has an interesting
+implementation that might not be immediately obvious to someone new to Python
+and its standard library:
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+from itertools import tee, izip
+
+def pairwise(iterable):
+    a, b = tee(iterable)
+    next(b, None)
+    return izip(a, b)
+\end{pythoncode}
+
+\noindent The \texttt{tee(iterable, n)} function returns \texttt{n} independent
+iterators from a single iterable. The default value for \texttt{n} is
+\texttt{2}, so in the example above two iterators called \texttt{a} and
+\texttt{b} are created from the original iterable.
+
+The second iterator is then advanced once by applying the \texttt{next()}
+function to it. The return value is discarded. This results in two iterators,
+with an offset of 1.
+
+As a last step, the two iterators are zipped together. By using the
+\texttt{izip()} function instead of the regular \texttt{zip()}, a lazy generator
+is returned instead of a list. This decreases memory consumption, especially
+when handling large lists.
+
+Now each time the returned generator is advanced one step, the sliding window is
+shifted by 1 position and the resulting tuple is returned, until the end of the
+iterator is reached.
+
+\vspace{.5\baselineskip}
+\begin{pythoncode}
+>>> data = [1, 2, 3, 'a']
+>>> pairs = pairwise(data)
+>>> pairs
+<itertools.izip object at 0x151def0>
+>>> next(pairs)
+(1, 2)
+>>> next(pairs)
+(2, 3)
+>>> next(pairs)
+(3, 'a')
+>>> next(pairs)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+	StopIteration
+\end{pythoncode}
+
+%----------------------------------------------------------------------------------------
+
 \section{Code Generation} \label{sec:design:codegen}
 
-Code generation code is often something quite messy, with many conditionals and
+Code generating code is often something quite messy, with many conditionals and
 a lot of \texttt{print} statements and string formatting. Such an approach is
 both hard to read and hard to maintain. Additionally, it does not reflect the
 structure of the generated code.
