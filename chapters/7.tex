@@ -8,9 +8,9 @@
 
 \section{Pairwise Iterator} \label{sec:design:pairwise}
 
-The pairwise iterator (in \texttt{tangible/utils.py}) has an interesting
-implementation that might not be immediately obvious to someone new to Python
-and its standard library:
+The pairwise iterator (in \texttt{tangible/utils.py}, see section
+\ref{subsec:architecture:pairwise}) has an interesting implementation that might
+not be immediately obvious to someone new to Python and its standard library:
 
 \vspace{.5\baselineskip}
 \begin{pythoncode}
@@ -29,7 +29,7 @@ iterators from a single iterable. The default value for \texttt{n} is
 
 The second iterator is then advanced once by applying the \texttt{next()}
 function to it. The return value is discarded. This results in two iterators,
-with an offset of 1.
+one of them with an offset of 1.
 
 As a last step, the two iterators are zipped together. By using the
 \texttt{izip()} function instead of the regular \texttt{zip()}, a lazy generator
@@ -187,11 +187,10 @@ module circle_sector(r, a) {
 };
 \end{minted}
 
-\noindent The base concept is that a circle with the specified radius and a
-polygon are combined, depending on the angle. If the angle is less than or equal
-to 180\si{\degree}, the resulting shape is the intersection of the circle and
-the polygon. If it's larger than 180\si{\degree}, the difference between the two
-shapes is returned.
+\noindent The base concept is a boolean combination of a circle and a polygon,
+depending on the angle. If the angle is less than or equal to 180\si{\degree},
+the resulting shape is the intersection of the circle and the polygon. If it's
+larger than 180\si{\degree}, the difference between the two shapes is returned.
 
 The polygon always consists of five points, which are calculated as shown in the
 following table for angles less or equal to 180\si{\degree}. For angles between
